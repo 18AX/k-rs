@@ -1,7 +1,10 @@
 #![no_std]
-use core::arch::asm;
 
 use core::panic::PanicInfo;
+
+use io::IOPort;
+
+mod io;
 
 #[panic_handler]
 fn panic(_info: &PanicInfo) -> ! {
@@ -10,14 +13,15 @@ fn panic(_info: &PanicInfo) -> ! {
 
 #[no_mangle]
 pub extern "C" fn k_main() {
-    let port: u16 = 0x3F8;
-    let value: u8 = 0x48;
+    let com1: IOPort<char> = IOPort::new(0x3F8);
 
-    loop {
-        unsafe {     asm!(
-            "out dx, al",
-            in("dx") port,
-            in("al") value,
-         ); }
-    }
+    com1.write('h');
+    com1.write('e');
+    com1.write('l');
+    com1.write('l');
+    com1.write('o');
+    com1.write('\r');
+    com1.write('\n');
+
+    loop {}
 }
