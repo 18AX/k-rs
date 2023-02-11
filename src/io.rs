@@ -31,7 +31,7 @@ pub trait IO {
         let mut readed: u8 = 0;
         unsafe {
             asm!(
-                "inb %al, %dx",
+                "inb %dx, %al",
                 in("dx") port,
                 out("al") readed,
                 options(att_syntax)
@@ -45,7 +45,7 @@ pub trait IO {
         let mut readed: u16 = 0;
         unsafe {
             asm!(
-                "inw %ax, %dx",
+                "inw %dx, %ax",
                 in("dx") port,
                 out("ax") readed,
                 options(att_syntax)
