@@ -1,16 +1,22 @@
 #![no_std]
 #![feature(alloc_error_handler)]
+#![feature(abi_x86_interrupt)]
+#![feature(panic_info_message)]
+
 extern crate alloc;
 
 use alloc::{boxed::Box, string::String};
-use core::panic::PanicInfo;
 use lazy_static::lazy_static;
-use log::{error, info, Level};
+use log::{info, Level};
 use memory::kernel_heap;
 use serial::Serial;
 
+use crate::{arch::x86_64::interrupt, panic::die};
+
+mod arch;
 mod io;
 mod memory;
+mod panic;
 mod serial;
 
 lazy_static! {
@@ -20,14 +26,8 @@ lazy_static! {
     };
 }
 
-#[panic_handler]
-fn panic(info: &PanicInfo) -> ! {
-    error!(target:"panic", "{:?}", info);
-    loop {}
-}
-
 #[no_mangle]
-pub extern "C" fn k_main() {
+pub extern "C" fn k_main() -> ! {
     kernel_heap::init();
 
     if log::set_logger(&*SERIAL).is_err() {
@@ -38,9 +38,15 @@ pub extern "C" fn k_main() {
 
     info!(target:"k_main", "Kernel starting");
 
+    interrupt::init();
+
     let b = Box::new(42);
 
     drop(b);
 
-    loop {}
+    unsafe {
+        core::arch::asm!("int 0x0");
+    };
+
+    die();
 }
