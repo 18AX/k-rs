@@ -3,10 +3,8 @@ ENTRY(_start)
 
 SECTIONS
 {
-    .multiboot_header : {
-        KEEP(*(.multiboot_header))
-    }
- 
+    . = 0xffffffff80200000;
+    
     .text : {
         *(.text*)
     }
