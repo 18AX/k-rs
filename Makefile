@@ -15,7 +15,7 @@ crt0.o: crt0.S
 	gcc $(CFLAGS) -c crt0.S -o crt0.o
 
 $(TARGET): crt0.o
-	cargo build --release --target x86_64-unknown-none
+	cargo build --release
 	$(CC) $(LFLAGS) crt0.o $(LIBK) -o k-rs
 
 iso: $(TARGET)
