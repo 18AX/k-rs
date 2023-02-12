@@ -62,7 +62,9 @@ impl Serial {
         serial.lcr.write(WORD_8_BITS);
 
         // Send interuptions
-        serial.fcr.write(FIFO_TRIGER_14);
+        serial
+            .fcr
+            .write(FIFO_TRIGER_14 | FIFO_CLEAR_RECEIVE | FIFO_CLEAR_TRANSMIT);
 
         Ok(serial)
     }
