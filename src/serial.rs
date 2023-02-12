@@ -1,4 +1,4 @@
-use alloc::{format, string::String};
+use alloc::format;
 use log::Log;
 
 use crate::io::IOPort;
@@ -91,7 +91,7 @@ impl Serial {
         self.dll.read()
     }
 
-    pub fn write_string(&self, data: &String) {
+    pub fn write_string(&self, data: &str) {
         data.chars().for_each(|c| self.write_byte(c as u8));
     }
 }
