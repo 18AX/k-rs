@@ -1,3 +1,6 @@
+use alloc::{format, string::String};
+use log::Log;
+
 use crate::io::IOPort;
 
 pub const COM1: u16 = 0x3F8;
@@ -87,4 +90,25 @@ impl Serial {
 
         self.dll.read()
     }
+
+    pub fn write_string(&self, data: &String) {
+        data.chars().for_each(|c| self.write_byte(c as u8));
+    }
+}
+
+impl Log for Serial {
+    fn enabled(&self, _: &log::Metadata) -> bool {
+        true
+    }
+
+    fn log(&self, record: &log::Record) {
+        self.write_string(&format!(
+            "[{}] {}: {}\r\n",
+            record.level(),
+            record.target(),
+            record.args()
+        ));
+    }
+
+    fn flush(&self) {}
 }

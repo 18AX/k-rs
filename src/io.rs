@@ -62,7 +62,7 @@ pub struct IOPort<T: IO> {
 }
 
 impl<T: IO> IOPort<T> {
-    pub fn new(port: u16) -> Self {
+    pub const fn new(port: u16) -> Self {
         IOPort {
             port,
             phantom: PhantomData,
