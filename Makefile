@@ -1,6 +1,6 @@
 CC?=gcc
 CFLAGS=-ffreestanding -fno-stack-protector -fno-pic -fpie -mno-80387 -mno-mmx -mno-3dnow -mno-sse -mno-sse2 -mno-red-zone
-LFLAGS=-nostdlib -T k-rs.ld -Wl,-static,-pie,--no-dynamic-linker,-ztext -static-pie -nostdlib -z max-page-size=0x1000
+LFLAGS=-nostdlib -T k-rs.ld -Wl,-static,-no-pie,--no-dynamic-linker,-ztext -static-pie -nostdlib -z max-page-size=0x1000
 
 TARGET=k-rs
 
