@@ -5,13 +5,13 @@
 
 extern crate alloc;
 
-use alloc::{boxed::Box, string::String};
+use alloc::string::String;
 use lazy_static::lazy_static;
 use log::{info, Level};
 use memory::kernel_heap;
 use serial::Serial;
 
-use crate::{arch::x86_64::interrupt, panic::die};
+use crate::panic::die;
 
 mod arch;
 mod io;
@@ -38,15 +38,9 @@ pub extern "C" fn k_main() -> ! {
 
     info!(target:"k_main", "Kernel starting");
 
-    interrupt::init();
+    arch::x86_64::init();
 
-    let b = Box::new(42);
-
-    drop(b);
-
-    unsafe {
-        core::arch::asm!("int 0x0");
-    };
+    info!(target:"k_main", "Arch initialized");
 
     die();
 }
