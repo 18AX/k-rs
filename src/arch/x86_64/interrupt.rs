@@ -1,4 +1,6 @@
-use x86_64::structures::idt::{InterruptDescriptorTable, InterruptStackFrame, PageFaultErrorCode};
+use x86_64::structures::idt::{
+    HandlerFunc, InterruptDescriptorTable, InterruptStackFrame, PageFaultErrorCode,
+};
 
 static mut IDT: InterruptDescriptorTable = InterruptDescriptorTable::new();
 
@@ -31,6 +33,12 @@ pub fn init() {
         IDT.security_exception.set_handler_fn(security_exception);
 
         IDT.load();
+    };
+}
+
+pub fn register_handler(index: u8, handler: HandlerFunc) {
+    unsafe {
+        IDT[index as usize].set_handler_fn(handler);
     };
 }
 

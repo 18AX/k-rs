@@ -18,6 +18,7 @@ mod io;
 mod memory;
 mod panic;
 mod serial;
+mod timer;
 
 lazy_static! {
     static ref SERIAL: Serial = match Serial::new(serial::COM1, 115200) {
