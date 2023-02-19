@@ -1,3 +1,5 @@
+use core::arch::asm;
+
 use x86_64::structures::idt::{
     HandlerFunc, InterruptDescriptorTable, InterruptStackFrame, PageFaultErrorCode,
 };
@@ -34,6 +36,17 @@ pub fn init() {
 
         IDT.load();
     };
+}
+
+pub fn enable_irq(state: bool) {
+    match state {
+        true => unsafe {
+            asm!("sti");
+        },
+        false => unsafe {
+            asm!("cli");
+        },
+    }
 }
 
 pub fn register_handler(index: u8, handler: HandlerFunc) {
