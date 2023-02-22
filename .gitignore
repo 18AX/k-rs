@@ -19,5 +19,7 @@ limine/
 *.log
 *.o
 *.iso
-k-rs
+krs
 iso/
+build
+*.elf
