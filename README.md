@@ -10,5 +10,6 @@ cd limine && make
 ```
 
 ```sh
-make iso
+./tools/makeiso.sh
+qemu-system-x86_64 -cdrom build/krs.iso -serial stdio
 ```
