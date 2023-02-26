@@ -5,15 +5,22 @@
 
 extern crate alloc;
 
-use alloc::string::String;
+use alloc::{boxed::Box, string::String};
 use lazy_static::lazy_static;
 use log::{info, Level};
 use memory::kernel_heap;
 use serial::Serial;
 
-use crate::panic::die;
+use crate::{
+    fs::{
+        rootfs::RootDir,
+        vfs::{self, NodeKind},
+    },
+    panic::die,
+};
 
 mod arch;
+mod fs;
 mod io;
 mod memory;
 mod panic;
@@ -27,6 +34,19 @@ lazy_static! {
     };
 }
 
+fn init_rootfs() {
+    let root_dir: vfs::Directory = vfs::Directory {
+        operation: Box::new(RootDir::new()),
+    };
+    let root_node = vfs::Node {
+        name: String::from("root"),
+        kind: NodeKind::Directory(root_dir),
+    };
+    let vfs: vfs::Vfs = vfs::Vfs::new(root_node);
+
+    vfs::set_root(vfs);
+}
+
 #[no_mangle]
 pub extern "C" fn k_main() -> ! {
     kernel_heap::init();
@@ -38,6 +58,10 @@ pub extern "C" fn k_main() -> ! {
     log::set_max_level(Level::Debug.to_level_filter());
 
     info!(target:"k_main", "Kernel starting");
+
+    init_rootfs();
+
+    info!(target:"k_main", "Virtual FS initialized");
 
     arch::x86_64::init();
 
