@@ -10,5 +10,8 @@ cd limine && make
 ```
 
 ```sh
-make iso
+mkdir build
+cd build
+cmake ..
+make
 ```
