@@ -1,6 +1,6 @@
 use log::info;
 
-use crate::timer::Timer;
+use crate::timer::{self, Timer};
 
 pub mod interrupt;
 pub mod pic;
@@ -17,7 +17,7 @@ pub fn init() {
     }
 
     unsafe {
-        info!(target:"x86_64_init", "PIT frequency {}", pit::PIT_TIMER.get_freq());
+        timer::set_default(&pit::PIT_TIMER);
     }
 
     pic::set_irq_state(pic::Irq::Pit, pic::IrqState::Unmask);
