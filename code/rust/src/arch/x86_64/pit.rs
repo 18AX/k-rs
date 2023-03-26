@@ -1,3 +1,4 @@
+use log::info;
 use x86_64::structures::idt::InterruptStackFrame;
 
 use crate::{arch::x86_64::pic, io::IOPort, timer::Timer};

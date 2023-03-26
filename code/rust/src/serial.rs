@@ -1,7 +1,7 @@
 use alloc::format;
 use log::Log;
 
-use crate::io::IOPort;
+use crate::{io::IOPort, timer};
 
 pub const COM1: u16 = 0x3F8;
 pub const COM2: u16 = 0x2F8;
@@ -104,8 +104,11 @@ impl Log for Serial {
     }
 
     fn log(&self, record: &log::Record) {
+        let counter: u64 = timer::get_ticks();
+
         self.write_string(&format!(
-            "[{}] {}: {}\r\n",
+            "[{}\t{}] {}: {}\r\n",
+            counter,
             record.level(),
             record.target(),
             record.args()
